@@ -2,7 +2,6 @@ import { createContext, useState, useEffect, useContext } from "react";
 
 const GameContext = createContext();
 
-//https://api.dictionaryapi.dev/api/v2/entries/en/castleeeee
 // eslint-disable-next-line
 function GameProvider({ children }) {
   // Index of current row and letter, where user is typing

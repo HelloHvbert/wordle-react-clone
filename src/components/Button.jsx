@@ -1,7 +1,7 @@
 import { useGame } from "../GameContext";
 
 //eslint-disable-next-line
-function Button({ value, onClick, color = null }) {
+function Button({ value, onClick, color = null, enable = true }) {
   const { badLetters, goodLetters, rightLetters } = useGame();
 
   // Choosing correct color for button
@@ -18,7 +18,7 @@ function Button({ value, onClick, color = null }) {
   return (
     <div
       onClick={onClick}
-      className={`key ${
+      className={`key ${!enable && "disabled"} ${
         isRightLetter
           ? "key-right"
           : isGoodLetter

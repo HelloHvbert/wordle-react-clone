@@ -40,7 +40,6 @@ function GameProvider({ children }) {
       );
       const data = await res.json();
       setData(data[0]);
-      console.log(data[0]);
     }
     !isWinner && fetchWord();
   }, [isWinner]);

@@ -2,7 +2,7 @@
 
 Welcome to the Wordle React Clone, a fun and interactive word puzzle game built with React. This clone of the popular Wordle game offers a sleek user interface and engaging gameplay, all developed using modern web technologies.
 
-## Try wordle app here: https://dreamy-paprenjak-fe93b5.netlify.app
+## Try wordle app here: [a link] (https://dreamy-paprenjak-fe93b5.netlify.app)
 
 ## Features
 

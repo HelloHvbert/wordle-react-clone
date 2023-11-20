@@ -1,7 +1,7 @@
 import Button from "./Button";
 import { useGame } from "../GameContext";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // eslint-disable-next-line
 function KeyboardRow({ letters, enterOrBackspace = false }) {
@@ -22,6 +22,8 @@ function KeyboardRow({ letters, enterOrBackspace = false }) {
     data,
     setIsWinner,
   } = useGame();
+
+  const [enableFunctions, setEnableFunctions] = useState(true);
 
   useEffect(() => {
     if (currentRow === 6) {
@@ -60,21 +62,31 @@ function KeyboardRow({ letters, enterOrBackspace = false }) {
   }
 
   async function handleEnter() {
+    if (!enableFunctions) return;
+    setEnableFunctions(false);
     if (currentWord.length < WORD_LENGTH) {
       toast.warning("Word must be 5 letters long");
       toast.clearWaitingQueue();
+      setEnableFunctions(true);
       return;
     }
 
-    const isValid = await validWord(currentWord);
+    try {
+      const isValid = await validWord(currentWord);
 
-    if (!isValid) {
-      setTimeout(() => {
-        toast.warning("Word not found");
-        toast.clearWaitingQueue();
-      }, 500);
-      changeWordFound();
-      return;
+      if (!isValid) {
+        setTimeout(() => {
+          toast.warning("Word not found");
+          toast.clearWaitingQueue();
+        }, 150);
+        changeWordFound();
+        setEnableFunctions(true);
+        return;
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    } finally {
+      setEnableFunctions(true);
     }
 
     // Moving to the next row/attempt
@@ -85,6 +97,7 @@ function KeyboardRow({ letters, enterOrBackspace = false }) {
     setCurrentLetter(0);
 
     setGuesses(setAtIndex(currentRow, currentWord));
+    setEnableFunctions(true);
 
     if (currentWord === data) {
       setTimeout(() => setIsWinner(true), 500);
@@ -95,7 +108,12 @@ function KeyboardRow({ letters, enterOrBackspace = false }) {
   return (
     <div className="keyboard-row">
       {enterOrBackspace && (
-        <Button value="Enter" className="enter" onClick={handleEnter} />
+        <Button
+          value="Enter"
+          className="enter"
+          onClick={handleEnter}
+          enable={enableFunctions}
+        />
       )}
       {/* eslint-disable-next-line */}
       {letters.split("").map((l) => (
@@ -108,7 +126,12 @@ function KeyboardRow({ letters, enterOrBackspace = false }) {
         />
       ))}
       {enterOrBackspace && (
-        <Button value="&lArr;" className="delete" onClick={handleReverse} />
+        <Button
+          value="&lArr;"
+          className="delete"
+          onClick={handleReverse}
+          enable={enableFunctions}
+        />
       )}
     </div>
   );

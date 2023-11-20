@@ -2,6 +2,7 @@ import { createContext, useState, useEffect, useContext } from "react";
 
 const GameContext = createContext();
 
+//https://api.dictionaryapi.dev/api/v2/entries/en/castleeeee
 // eslint-disable-next-line
 function GameProvider({ children }) {
   // Index of current row and letter, where user is typing
@@ -31,14 +32,18 @@ function GameProvider({ children }) {
 
   useEffect(() => {
     async function fetchWord() {
-      // const res = await fetch(
-      //   "https://random-word-api.herokuapp.com/word?length=5"
-      // );
-      const res = await fetch(
-        "https://random-word-api.vercel.app/api?words=1&length=5"
-      );
-      const data = await res.json();
-      setData(data[0]);
+      try {
+        // const res = await fetch(
+        //   "https://random-word-api.herokuapp.com/word?length=5"
+        // );
+        const res = await fetch(
+          "https://random-word-api.vercel.app/api?words=1&length=5"
+        );
+        const data = await res.json();
+        setData(data[0]);
+      } catch (error) {
+        throw new Error("Error fetching word");
+      }
     }
     !isWinner && fetchWord();
   }, [isWinner]);
